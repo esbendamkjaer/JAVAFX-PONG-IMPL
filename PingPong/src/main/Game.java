@@ -8,8 +8,8 @@ import java.awt.image.BufferStrategy;
 import main.gamehandler.GameHandler;
 import main.listener.Listener;
 import main.objects.Ball;
-import main.objects.pad.AIPaddle;
-import main.objects.pad.PlayerPaddle;
+import main.objects.paddle.AIPaddle;
+import main.objects.paddle.PlayerPaddle;
 import main.window.Window;
 
 public class Game extends Canvas implements Runnable {

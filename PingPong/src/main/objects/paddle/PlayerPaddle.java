@@ -1,4 +1,4 @@
-package main.objects.pad;
+package main.objects.paddle;
 
 import main.listener.Listener;
 

@@ -15,9 +15,9 @@ import javax.sound.sampled.Clip;
 
 import main.Game;
 import main.objects.Ball;
-import main.objects.pad.AIPaddle;
-import main.objects.pad.Paddle;
-import main.objects.pad.PlayerPaddle;
+import main.objects.paddle.AIPaddle;
+import main.objects.paddle.Paddle;
+import main.objects.paddle.PlayerPaddle;
 
 public class GameHandler {
 	

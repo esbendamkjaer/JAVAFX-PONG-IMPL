@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import main.Game;
-import main.objects.pad.Paddle;
+import main.objects.paddle.Paddle;
 
 public class Ball extends Object {
 		
