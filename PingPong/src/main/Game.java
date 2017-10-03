@@ -1,56 +1,26 @@
 package main;
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferStrategy;
 
+import javafx.animation.AnimationTimer;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import main.gamehandler.GameHandler;
 import main.listener.Listener;
-import main.objects.Ball;
-import main.objects.paddle.AIPaddle;
-import main.objects.paddle.PlayerPaddle;
 import main.window.Window;
 
-public class Game extends Canvas implements Runnable {
-
-	private static final long serialVersionUID = -8395759457708163217L;
+public class Game extends Canvas {
 	
-	private Thread game;
 	private boolean running;
 	
-	private Window window;
-		
-	private final double scale = 1;
-	public static final int WIDTH = 800, HEIGHT = 600;
-		
 	public static final int TICKS_PER_SECOND = 60;
 
 	private GameHandler gameHandler;
 	
 	private Listener listener;
 	
-	public Game() {
-		
-		window = new Window("Pong", (int) (WIDTH*scale), (int) (HEIGHT*scale), this);
-		
-		listener = new Listener();
-		addMouseMotionListener(listener);
-		
-		requestFocus();
-	}
+	private GraphicsContext g;
 	
-	
-	public void init() {
-		gameHandler = new GameHandler();
-		gameHandler.init();
-	}
-	
-	@Override
-	public void run() {
-		
-		init();
-		
+	private AnimationTimer gameLoop = new AnimationTimer() {
+
 		int fpsCount = 0;
 		
 		double nsPerTick = 1000000000/TICKS_PER_SECOND;
@@ -59,11 +29,16 @@ public class Game extends Canvas implements Runnable {
 		
 		long lastTime = System.nanoTime();
 		long lastTimer = System.currentTimeMillis();
+				
+		@Override
+		public void start() {
+			init();
+			super.start();
+		}
 		
-		long sleepTime = (long) (1000/TICKS_PER_SECOND*(1-0.1));
-		
-		while (running) {
-			long now = System.nanoTime();
+		@Override
+		public void handle(long now) {
+
 			delta += (now-lastTime)/nsPerTick;
 			lastTime = now;
 			
@@ -74,12 +49,6 @@ public class Game extends Canvas implements Runnable {
 				delta--;
 			}
 			
-			try {
-				Thread.sleep(sleepTime);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
 			if (System.currentTimeMillis()-lastTimer >= 1000) {
 				System.out.println("FPS: " + fpsCount);
 				fpsCount = 0;
@@ -88,6 +57,27 @@ public class Game extends Canvas implements Runnable {
 			
 		}
 		
+	};
+	
+	public Game(double width, double height) {
+		super(width, height);
+		
+		listener = new Listener();
+		
+		setOnMouseMoved(listener);
+		setOnMouseDragged(listener);
+		
+		requestFocus();
+		
+	}
+	
+	
+	public void init() {
+		g = getGraphicsContext2D();
+		g.scale(Window.SCALE, Window.SCALE);
+
+		gameHandler = new GameHandler();
+		gameHandler.init();
 	}
 	
 	public void tick() {
@@ -95,43 +85,25 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	public void render() {
-		BufferStrategy bs = getBufferStrategy();
-		if (bs == null) {
-			createBufferStrategy(3);
-			return;
-		}
-
-		Graphics2D g = (Graphics2D) bs.getDrawGraphics();
-		g.scale(scale, scale);
-		g.clearRect(0, 0, getWidth(), getHeight());
 		
+		g.clearRect(0, 0, getWidth(), getHeight());
 		gameHandler.render(g);
 		
-		g.dispose();
-		bs.show();
-		
 	}
 	
-	/**
-	 * Start the game thread.
-	 */
 	public void start() {
 		if (running) return;
-		game = new Thread(this, "Game");
-		game.start();
+		
+		gameLoop.start();
+		
 		running = true;
 	}
-	
-	/**
-	 * Stop the game thread.
-	 */
+
 	public void stop() {
 		if (!running) return;
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} 
+		
+		gameLoop.stop();
+		
 		running = false;
 	}
 	

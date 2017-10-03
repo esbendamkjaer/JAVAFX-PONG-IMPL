@@ -1,6 +1,7 @@
 package main.objects.paddle;
 
 import main.listener.Listener;
+import main.window.Window;
 
 public class PlayerPaddle extends Paddle {
 	
@@ -11,16 +12,16 @@ public class PlayerPaddle extends Paddle {
 
 	@Override
 	protected void move() {
-		float distance = yDistance(y + height / 2, Listener.mouse_y);
-		float speed = this.speed;
+		double distance = yDistance(y + height / 2, Listener.mouse_y);
+		double speed = this.speed;
 		
 		if (distance < this.speed) {
 			speed = distance;
 		}
 		
-		if (y + height / 2 - speed/2 > Listener.mouse_y) {
+		if (y + height / 2 - speed/2 > Listener.mouse_y / Window.SCALE) {
 			y -= speed;
-		} else if (y + height / 2  + speed/2 < Listener.mouse_y) {
+		} else if (y + height / 2  + speed/2 < Listener.mouse_y / Window.SCALE) {
 			y += speed;
 		}
 	}

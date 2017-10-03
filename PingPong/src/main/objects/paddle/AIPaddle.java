@@ -1,7 +1,7 @@
 package main.objects.paddle;
 
-import main.Game;
 import main.objects.Ball;
+import main.window.Window;
 
 public class AIPaddle extends Paddle {
 	
@@ -9,15 +9,15 @@ public class AIPaddle extends Paddle {
 	
 	public AIPaddle(Ball ball) {
 		this.ball = ball;
-		x = Game.WIDTH-width;
+		x = Window.WIDTH-width;
 		y = 0;
 		speed = 8;
 	}
 
 	@Override
 	protected void move() {
-		float distance = yDistance(y + height / 2, ball.getY() + ball.getHeight() / 2);
-		float speed = this.speed;
+		double distance = yDistance(y + height / 2, ball.getY() + ball.getHeight() / 2);
+		double speed = this.speed;
 		
 		if (distance < this.speed) {
 			speed = distance;

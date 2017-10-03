@@ -1,10 +1,8 @@
 package main.objects;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-
-import main.Game;
-import main.objects.paddle.Paddle;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import main.window.Window;
 
 public class Ball extends Object {
 		
@@ -13,8 +11,8 @@ public class Ball extends Object {
 	
 	public Ball() {
 		
-		x = Game.WIDTH / 2 - width / 2;
-		y = Game.HEIGHT / 2 - height / 2; 
+		x = Window.WIDTH / 2 - width / 2;
+		y = Window.HEIGHT / 2 - height / 2; 
 		
 		width = 15;
 		height = 15;
@@ -30,8 +28,8 @@ public class Ball extends Object {
 	}
 	
 	@Override
-	public void render(Graphics2D g) {
-		g.setColor(Color.white);
+	public void render(GraphicsContext g) {
+		g.setFill(Color.WHITE);
 		g.fillRect((int) x, (int) y, width, height);
 	}
 	

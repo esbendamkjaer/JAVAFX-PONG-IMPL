@@ -1,37 +1,38 @@
 package main.window;
 
-import java.awt.Dimension;
-
-import javax.swing.JFrame;
-
+import javafx.application.Application;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import main.Game;
 
-public class Window extends JFrame {
+public class Window extends Application {
+	
+	private String title = "Ping Pong";
+	private Game game;
+	
+	public static final int WIDTH = 800, HEIGHT = 600;
+	
+	public static final double SCALE = 1d;
 
-	private static final long serialVersionUID = -8255319694373975038L;
-	
-	private int height, width;
-	
-	public Window(String title, int width, int height, Game game) {
-		super(title);
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		primaryStage.setTitle(title);
 		
-		this.height = height;
-		this.width = width;
+		Group root = new Group();
 		
-		game.setPreferredSize(new Dimension(width, height));
-		game.setMaximumSize(new Dimension(width, height));
-		game.setMinimumSize(new Dimension(width, height));
-		add(game);
+		game = new Game(WIDTH * SCALE, HEIGHT * SCALE);
 		
-		setResizable(false);
+		root.getChildren().add(game);
 		
-		pack();
+		Scene scene = new Scene(root, WIDTH * SCALE, HEIGHT * SCALE);
+		primaryStage.setScene(scene);
+		primaryStage.sizeToScene();
+		primaryStage.setResizable(false);
+		primaryStage.centerOnScreen();
+		primaryStage.show();
 		
-		setLocationRelativeTo(null);
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				
-		setVisible(true);
+		game.start();
 	}
 	
 }

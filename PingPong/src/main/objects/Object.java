@@ -1,6 +1,6 @@
 package main.objects;
 
-import java.awt.Graphics2D;
+import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Object {
 
@@ -9,7 +9,7 @@ public abstract class Object {
 	
 	public abstract void tick();
 	
-	public abstract void render(Graphics2D g);
+	public abstract void render(GraphicsContext g);
 	
 	public float getX() {
 		return x;

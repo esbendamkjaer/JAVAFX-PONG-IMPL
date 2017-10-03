@@ -1,23 +1,24 @@
 package main.gamehandler;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Stroke;
 import java.io.InputStream;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-import main.Game;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontSmoothingType;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import main.objects.Ball;
 import main.objects.paddle.AIPaddle;
 import main.objects.paddle.Paddle;
 import main.objects.paddle.PlayerPaddle;
+import main.window.Window;
 
 public class GameHandler {
 	
@@ -41,7 +42,7 @@ public class GameHandler {
 		checkCollisions();
 	}
 	
-	public void render(Graphics2D g) {
+	public void render(GraphicsContext g) {
 		drawBackground(g);
 		
 		left_paddle.render(g);
@@ -49,23 +50,39 @@ public class GameHandler {
 		ball.render(g);
 	}
 	
-	private void drawBackground(Graphics2D g) {
-		g.setColor(new Color(51, 51, 51));
-		g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+	private void drawBackground(GraphicsContext g) {
+		g.setFill(Color.rgb(51, 51, 51));
+		g.fillRect(0, 0, Window.WIDTH, Window.HEIGHT);
 		
-		g.setColor(Color.WHITE);
-		Stroke dashed = new BasicStroke(5, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{12, 8}, 0);
-		g.setStroke(dashed);
-		int lineX = Game.WIDTH / 2;
-		g.drawLine(lineX, 0, lineX, Game.HEIGHT);
+		g.setFill(Color.WHITE);
+		//Stroke dashed = new BasicStroke(5, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{12, 8}, 0);
+		//g.setStroke(dashed);
 		
-		g.setFont(new Font("Verdana", Font.BOLD, 20));
-		FontMetrics fm = g.getFontMetrics();
-		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+		g.setStroke(Color.WHITE);
+		g.setLineWidth(5);
+		g.setLineDashes(12);
+		g.setLineDashOffset(6);
+		g.setLineCap(StrokeLineCap.BUTT);
+		g.setLineJoin(StrokeLineJoin.BEVEL);
+		
+		int lineX = Window.WIDTH / 2;
+		g.strokeLine(lineX, 0, lineX, Window.HEIGHT);
+		
+		Font font = Font.font("Verdana", FontWeight.BOLD, 20);
+		
+		g.setFontSmoothingType(FontSmoothingType.GRAY);
+		
+		g.setFont(font);
 		String points = left_paddle.getPoints() + "";
-		g.drawString(points, Game.WIDTH/4 - fm.stringWidth(points), fm.getHeight() + 20);
+		
+		Text message = new Text(points);
+		message.setFont(font);
+		
+		//g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+		
+		g.fillText(points, Window.WIDTH/4 - message.getLayoutBounds().getWidth(), message.getLayoutBounds().getHeight() + 20);
 		points = right_paddle.getPoints() + "";
-		g.drawString(points, Game.WIDTH - Game.WIDTH/4 - fm.stringWidth(points), fm.getHeight() + 20);
+		g.fillText(points, Window.WIDTH - Window.WIDTH/4 - message.getLayoutBounds().getWidth(), message.getLayoutBounds().getHeight() + 20);
 	}
 	
 	private void checkCollisions() {
@@ -90,9 +107,9 @@ public class GameHandler {
 			ball.setVelY(-ball.getVelY());
 			ball.setY(0);
 			playSound();
-		} else if (ball.getY() + ball.getHeight()> Game.HEIGHT) {
+		} else if (ball.getY() + ball.getHeight()> Window.HEIGHT) {
 			ball.setVelY(-ball.getVelY());
-			ball.setY(Game.HEIGHT - ball.getHeight());
+			ball.setY(Window.HEIGHT - ball.getHeight());
 			playSound();
 		}
 	}
@@ -111,6 +128,7 @@ public class GameHandler {
 	private void playSound() {
 		try {
 			InputStream in = GameHandler.class.getResourceAsStream("/plong.wav");
+			if (in == null) return;
 			AudioInputStream as = AudioSystem.getAudioInputStream(in);
 			Clip clip = AudioSystem.getClip();
 			clip.open(as);
@@ -128,8 +146,8 @@ public class GameHandler {
 		} else return;
 		ball.setVelX(-ball.getVelX());
 		ball.setVelY((float) Math.random() * 12 - 6);
-		ball.setX(Game.WIDTH / 2 - ball.getWidth() / 2);
-		ball.setY(Game.HEIGHT / 2 - ball.getHeight() / 2); 
+		ball.setX(Window.WIDTH / 2 - ball.getWidth() / 2);
+		ball.setY(Window.HEIGHT / 2 - ball.getHeight() / 2); 
 	}
 	
 }

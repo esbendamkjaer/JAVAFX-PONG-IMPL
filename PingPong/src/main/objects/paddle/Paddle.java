@@ -1,10 +1,10 @@
 package main.objects.paddle;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 
-import main.Game;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import main.objects.Object;
+import main.window.Window;
 
 public abstract class Paddle extends Object {
 	
@@ -17,8 +17,8 @@ public abstract class Paddle extends Object {
 	}
 	
 	@Override
-	public void render(Graphics2D g) {
-		g.setColor(Color.white);
+	public void render(GraphicsContext g) {
+		g.setFill(Color.WHITE);
 		g.fillRect((int) x, (int) y, width, height);
 	}
 	
@@ -31,13 +31,13 @@ public abstract class Paddle extends Object {
 		
 		if (y <= 0) {
 			y = 0;
-		} else if (y + height >= Game.HEIGHT) {
-			y = Game.HEIGHT - height;
+		} else if (y + height >= Window.HEIGHT) {
+			y = Window.HEIGHT - height;
 		}
 		
 	}
 	
-	protected float yDistance(float y1, float y2) {
+	protected double yDistance(double y1, double y2) {
 		return Math.max(y1, y2) - Math.min(y1, y2);
 	}
 	

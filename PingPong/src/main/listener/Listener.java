@@ -1,16 +1,22 @@
 package main.listener;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 
-public class Listener implements KeyListener, MouseMotionListener {
+public class Listener implements EventHandler<MouseEvent> {
 
-	public static int mouse_x;
-	public static int mouse_y;
+	public static double mouse_x;
+	public static double mouse_y;
 	
 	@Override
+	public void handle(MouseEvent event) {
+		
+		mouse_x = event.getX();
+		mouse_y = event.getY();
+		
+	}
+	
+	/*@Override
 	public void keyPressed(KeyEvent e) {
 		
 	}
@@ -34,6 +40,6 @@ public class Listener implements KeyListener, MouseMotionListener {
 	public void mouseMoved(MouseEvent e) {
 		mouse_x = e.getX();
 		mouse_y = e.getY();
-	}
+	}*/
 	
 }
